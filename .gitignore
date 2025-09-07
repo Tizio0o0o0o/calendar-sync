@@ -1,0 +1,10 @@
+# Ignora la cartella venv (ambiente virtuale Python)
+venv/
+
+# Ignora file di configurazione sensibili
+config.json
+credentials.json
+token.json
+
+# Ignora file di log
+*.log
