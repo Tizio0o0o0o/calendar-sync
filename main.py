@@ -31,7 +31,7 @@ except FileNotFoundError:
 SCOPES = ["https://www.googleapis.com/auth/calendar"]
 SOURCE_CALENDARS = config['source_calendars']
 MASTER_CALENDAR_ID = config['master_calendar_id']
-FREE_TIME_CALENDAR_ID = config['free_time_calendar_id']
+FREE_TIME_CALENDAR_ID = config.get('free_time_calendar_id')
 FREE_TIME_EVENT_TITLE = config['free_time_event_title']
 TIMEZONE = pytz.timezone(config['timezone'])
 WORKING_HOURS = config['working_hours']
@@ -127,6 +127,9 @@ def sync_master_calendar(service):
 
 
 def update_free_time_calendar(service):
+    if not FREE_TIME_CALENDAR_ID:
+        logging.info("Free time calendar not configured; skipping update.")
+        return
     logging.info("Efficiently updating free time calendar...")
     today = datetime.datetime.now(tz=TIMEZONE).replace(hour=0, minute=0, second=0, microsecond=0)
     time_min = today.isoformat()
