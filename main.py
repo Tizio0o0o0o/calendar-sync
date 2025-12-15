@@ -47,7 +47,14 @@ def get_calendar_service():
             creds.refresh(Request())
         else:
             flow = InstalledAppFlow.from_client_secrets_file("credentials.json", SCOPES)
-            creds = flow.run_local_server(port=0)
+
+            auth_url, _ = flow.authorization_url(prompt='consent')
+            print('Please go to this URL and authorize the application:')
+            print(auth_url)
+
+            code = input('Enter the authorization code here: ')
+            flow.fetch_token(code=code)
+            creds = flow.credentials
         with open("token.json", "w") as token:
             token.write(creds.to_json())
     return build("calendar", "v3", credentials=creds)
